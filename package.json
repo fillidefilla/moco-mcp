@@ -1,0 +1,43 @@
+{
+  "name": "@fillidefilla/moco-mcp",
+  "version": "0.1.0",
+  "description": "MCP server for MOCO - read-only access to projects, invoices, activities, and users",
+  "type": "module",
+  "main": "build/index.js",
+  "bin": {
+    "moco-mcp": "build/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "start": "node build/index.js",
+    "check": "tsc --noEmit",
+    "clean": "rm -rf build"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "moco",
+    "mocoapp",
+    "time-tracking",
+    "project-management",
+    "invoicing"
+  ],
+  "author": "FilliDeFilla",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fillidefilla/moco-mcp.git"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.25.0",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.7.0"
+  }
+}
