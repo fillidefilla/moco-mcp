@@ -22,7 +22,34 @@ import {
   listActivitiesSchema,
   listActivities,
 } from "./tools/activities.js";
-import { listUsersSchema, listUsers } from "./tools/users.js";
+import {
+  listUsersSchema,
+  listUsers,
+  getUserSchema,
+  getUser,
+  getUserPerformanceReportSchema,
+  getUserPerformanceReport,
+} from "./tools/users.js";
+import {
+  listEmploymentsSchema,
+  listEmployments,
+} from "./tools/employments.js";
+import {
+  listPresencesSchema,
+  listPresences,
+} from "./tools/presences.js";
+import {
+  listHolidaysSchema,
+  listHolidays,
+} from "./tools/holidays.js";
+import {
+  listWorkTimeAdjustmentsSchema,
+  listWorkTimeAdjustments,
+} from "./tools/work_time_adjustments.js";
+import {
+  listSchedulesSchema,
+  listSchedules,
+} from "./tools/schedules.js";
 
 const server = new McpServer({
   name: "moco-mcp",
@@ -75,10 +102,87 @@ server.tool(
 
 server.tool(
   "moco_list_users",
-  "List all users in MOCO. Shows name, email, and department for each user.",
+  "List users in MOCO. Filter by tags, email, or include deactivated users. Returns name, email, and unit for each user.",
   listUsersSchema.shape,
   async (args: z.input<typeof listUsersSchema>) => ({
     content: [{ type: "text" as const, text: await listUsers(args) }],
+  }),
+);
+
+server.tool(
+  "moco_get_user",
+  "Get a single user by ID with full details (contact, role, unit, tags, info).",
+  getUserSchema.shape,
+  async (args: z.input<typeof getUserSchema>) => ({
+    content: [{ type: "text" as const, text: await getUser(args) }],
+  }),
+);
+
+server.tool(
+  "moco_get_user_performance_report",
+  "Get a user's performance report for a given year: target hours vs tracked hours, with the resulting variation (work-time saldo) annually and per month.",
+  getUserPerformanceReportSchema.shape,
+  async (args: z.input<typeof getUserPerformanceReportSchema>) => ({
+    content: [
+      { type: "text" as const, text: await getUserPerformanceReport(args) },
+    ],
+  }),
+);
+
+// -- Employments --
+
+server.tool(
+  "moco_list_employments",
+  "List employment records (contracts) from MOCO. Each record has weekly target hours, daily work pattern, and contract date range. Filter by user, from, or to.",
+  listEmploymentsSchema.shape,
+  async (args: z.input<typeof listEmploymentsSchema>) => ({
+    content: [{ type: "text" as const, text: await listEmployments(args) }],
+  }),
+);
+
+// -- Presences --
+
+server.tool(
+  "moco_list_presences",
+  "List presences (work-time entries) from MOCO. Requires a date range. Filter by user or home-office flag. Independent from project time entries.",
+  listPresencesSchema.shape,
+  async (args: z.input<typeof listPresencesSchema>) => ({
+    content: [{ type: "text" as const, text: await listPresences(args) }],
+  }),
+);
+
+// -- Holidays --
+
+server.tool(
+  "moco_list_holidays",
+  "List user holiday entitlements from MOCO. Filter by year or user. Each record holds the annual entitlement in days and hours.",
+  listHolidaysSchema.shape,
+  async (args: z.input<typeof listHolidaysSchema>) => ({
+    content: [{ type: "text" as const, text: await listHolidays(args) }],
+  }),
+);
+
+// -- Work time adjustments --
+
+server.tool(
+  "moco_list_work_time_adjustments",
+  "List work time adjustments from MOCO. These are manual corrections to the work-time saldo (e.g. extra hours during vacation, bonus hours, generic corrections). Filter by user or date range.",
+  listWorkTimeAdjustmentsSchema.shape,
+  async (args: z.input<typeof listWorkTimeAdjustmentsSchema>) => ({
+    content: [
+      { type: "text" as const, text: await listWorkTimeAdjustments(args) },
+    ],
+  }),
+);
+
+// -- Schedules --
+
+server.tool(
+  "moco_list_schedules",
+  "List schedule entries (planned absences) from MOCO. Covers unplannable absence, public holiday, sick day, holiday, and generic absence. Filter by user, date range, absence code, or absence request.",
+  listSchedulesSchema.shape,
+  async (args: z.input<typeof listSchedulesSchema>) => ({
+    content: [{ type: "text" as const, text: await listSchedules(args) }],
   }),
 );
 

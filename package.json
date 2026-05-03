@@ -1,7 +1,7 @@
 {
   "name": "@fillidefilla/moco-mcp",
   "version": "0.1.0",
-  "description": "MCP server for MOCO - read-only access to projects, invoices, activities, and users",
+  "description": "MCP server for MOCO - read-only access to projects, invoices, activities, users, employments, presences, holidays, work time adjustments, and schedules",
   "type": "module",
   "main": "build/index.js",
   "bin": {

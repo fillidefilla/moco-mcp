@@ -1,6 +1,6 @@
 # moco-mcp
 
-> MCP server for [MOCO](https://www.mocoapp.com) - read-only access to projects, invoices, time entries, and users.
+> MCP server for [MOCO](https://www.mocoapp.com) - read-only access to projects, invoices, time entries, users, employments, presences, holidays, work time adjustments, and schedules.
 
 An open source [Model Context Protocol](https://modelcontextprotocol.io) server that lets AI assistants (Claude, ChatGPT, Cursor, etc.) query your MOCO data in natural language. Built with TypeScript and Nix.
 
@@ -12,7 +12,14 @@ An open source [Model Context Protocol](https://modelcontextprotocol.io) server 
 | `moco_get_project` | Get a single project with full details and optional business report |
 | `moco_list_invoices` | List invoices with filters (status, date range, company, project) |
 | `moco_list_activities` | List time entries with filters (date range, user, project, billable) |
-| `moco_list_users` | List all users with name, email, and department |
+| `moco_list_users` | List users with filters (tags, email, archived) |
+| `moco_get_user` | Get a single user by ID with full details |
+| `moco_get_user_performance_report` | Target vs tracked hours with the resulting variation (annual + monthly) |
+| `moco_list_employments` | List employment records (weekly target hours, work pattern, date range) |
+| `moco_list_presences` | List presences (work-time entries), filter by user, date range, home-office |
+| `moco_list_holidays` | List user holiday entitlements by year |
+| `moco_list_work_time_adjustments` | List manual saldo corrections, filter by user and date range |
+| `moco_list_schedules` | List planned absences (unplannable, public holiday, sick, holiday, absence) |
 
 ## Prerequisites
 
@@ -123,15 +130,20 @@ Add to `.cursor/mcp.json` in your project:
 
 ```
 src/
-  index.ts          # Server entry point, tool registration
-  api.ts            # MOCO API client (auth, pagination, fetch helpers)
+  index.ts                    # Server entry point, tool registration
+  api.ts                      # MOCO API client (auth, pagination, fetch helpers)
   tools/
-    projects.ts     # Project tools (list, get with report)
-    invoices.ts     # Invoice tools (list with filters)
-    activities.ts   # Activity/time entry tools (list with filters)
-    users.ts        # User tools (list)
-build/              # Compiled output (gitignored)
-flake.nix           # Nix dev shell definition
+    projects.ts               # Project tools (list, get with report)
+    invoices.ts               # Invoice tools (list with filters)
+    activities.ts             # Activity/time entry tools (list with filters)
+    users.ts                  # User tools (list, get, performance report)
+    employments.ts            # Employment record tools (list)
+    presences.ts              # Presence/work-time tools (list)
+    holidays.ts               # Holiday entitlement tools (list)
+    work_time_adjustments.ts  # Saldo adjustment tools (list)
+    schedules.ts              # Absence schedule tools (list)
+build/                        # Compiled output (gitignored)
+flake.nix                     # Nix dev shell definition
 ```
 
 ## MOCO API
